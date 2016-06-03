@@ -56,6 +56,42 @@ class Preferences extends Admin
             'help' => _i('Set the title displayed on the index page.')
         );
 
+        $form['separator-2'] = array(
+            'type' => 'separator'
+        );
+
+        $form['foolframe.cache.system'] = array(
+            'type' => 'select',
+            'label' => _i('Cache System'),
+            'help' => _i('Set the cache system you want to use. Selected cache server needs to be running before you save.'),
+            'options' => $this->config->get('foolz/foolframe', 'package', 'preferences.cache_type.available'),
+            'preferences' => true,
+        );
+
+        $form['foolframe.cache.format'] = array(
+            'type' => 'select',
+            'label' => _i('Cache Format'),
+            'help' => _i('Set the cache format you want to use. If you change this you need to flush your cache server database.'),
+            'options' => $this->config->get('foolz/foolframe', 'package', 'preferences.cache_format.available'),
+            'preferences' => true,
+            'validation_func' => function() {
+                /* I would like to flush() here */
+            }
+        );
+
+        $form['foolframe.cache.servers'] = array(
+            'type' => 'textarea',
+            'label' => _i('Cache Servers'),
+            'preferences' => true,
+            'help' => _i('Set address of your cache server(s). Leave blank for localhost. Syntax: ').
+            '<pre style="margin-top:8px">address:port:weight,address:port:weight</pre>',
+            'class' => 'span3'
+        );
+
+        $form['separator-3'] = array(
+            'type' => 'separator'
+        );
+
         $form['foolframe.maxmind.geoip2_db_path'] = [
             'type' => 'input',
             'label' => _i('GeoIP database path'),
@@ -119,7 +155,7 @@ class Preferences extends Admin
             'preferences' => true,
         );
 
-        $form['separator-2'] = array(
+        $form['separator-4'] = array(
             'type' => 'separator'
         );
 
@@ -185,7 +221,7 @@ class Preferences extends Admin
             'class' => 'span2'
         );
 
-        $form['separator-3'] = array(
+        $form['separator-5'] = array(
             'type' => 'separator'
         );
 

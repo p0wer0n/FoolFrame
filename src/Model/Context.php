@@ -172,8 +172,33 @@ class Context implements ContextInterface
 
         // start up the caching system
         $caching_config = $this->config->get('foolz/foolframe', 'cache', '');
+
+        // we need to forge dummy first so we can get preferences without cache instance
+        $dummy_config = \Foolz\Cache\Config::forgeDummy();
+        $dummy_config->setFormat($caching_config['format']);
+        $dummy_config->setPrefix($caching_config['prefix']);
+        $dummy_config->setThrow(true);
+        Cache::instantiate($dummy_config);
+
+        if($this->preferences->get('foolframe.cache.system')) {
+            $caching_config['type'] = $this->preferences->get('foolframe.cache.system');
+        }
+        if($this->preferences->get('foolframe.cache.format')) {
+            $caching_config['format'] = $this->preferences->get('foolframe.cache.format');
+        }
+        if($this->preferences->get('foolframe.cache.servers')) {
+            $servers = explode(',',$this->preferences->get('foolframe.cache.servers'));
+            foreach($servers as $server) {
+                $server = explode(':',$server);
+                array_push($caching_config['servers'],array('host'=>$server[0],'port'=>$server[1],'weight'=>$server[2]));
+            }
+        } else {
+            $caching_config['servers'] = array();
+        }
+
         switch ($caching_config['type']) {
             case 'redis':
+                \Foolz\Cache\Cache::destroy('dummy');
                 $mem_config = \Foolz\Cache\Config::forgeRedis();
                 $mem_config->setFormat($caching_config['format']);
                 $mem_config->setPrefix($caching_config['prefix']);
@@ -183,6 +208,7 @@ class Context implements ContextInterface
                 break;
 
             case 'memcached':
+                \Foolz\Cache\Cache::destroy('dummy');
                 $mem_config = \Foolz\Cache\Config::forgeMemcached();
                 $mem_config->setFormat($caching_config['format']);
                 $mem_config->setPrefix($caching_config['prefix']);
@@ -192,6 +218,7 @@ class Context implements ContextInterface
                 break;
 
             case 'apc':
+                \Foolz\Cache\Cache::destroy('dummy');
                 $apc_config = \Foolz\Cache\Config::forgeApc();
                 $apc_config->setFormat($caching_config['format']);
                 $apc_config->setPrefix($caching_config['prefix']);
@@ -199,13 +226,15 @@ class Context implements ContextInterface
                 Cache::instantiate($apc_config);
                 break;
 
+            /*
+             * forged already
             case 'dummy':
                 $dummy_config = \Foolz\Cache\Config::forgeDummy();
                 $dummy_config->setFormat($caching_config['format']);
                 $dummy_config->setPrefix($caching_config['prefix']);
                 $dummy_config->setThrow(true);
                 Cache::instantiate($dummy_config);
-                break;
+            break;*/
         }
 
         // run the Framework class for each module

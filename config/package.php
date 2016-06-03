@@ -88,6 +88,25 @@ return [
                 'it_IT' => 'Italian',
                 'pt_PT' => 'Portuguese',
             ]
+        ],
+
+        'cache_type' => [
+            'default' => 'dummy',
+            'available' => [
+                'dummy' => 'None',
+                'memcached' => 'Memcached',
+                'redis' => 'Redis',
+                'apc' => 'APC',
+            ]
+        ],
+
+        'cache_format' => [
+            'default' => 'smart_json',
+            'available' => [
+                'smart_json' => 'SmartJson',
+                'array_json' => 'ArrayJson',
+                'serialized' => 'Serialized',
+            ]
         ]
     ]
 ];
