@@ -98,10 +98,10 @@ $sidebar['meta'] = [
     'level' => 'user',
     'default' => 'http://www.foolz.us/',
     'content' => [
-        'https://archive.foolz.us/dev/' => [
+        'http://foolfuuka.rtfd.org/' => [
             'level' => 'user',
-            'name' => _i('Developer Community'),
-            'icon' => 'icon-comment'
+            'name' => _i('Software Documentation'),
+            'icon' => 'icon-info-sign'
         ],
         'http://www.foolz.us/' => [
             'level' => 'user',
