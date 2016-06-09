@@ -91,6 +91,17 @@ class Preferences extends Model
             }
 
             Cache::item('foolframe.model.preferences.settings')->set($this->preferences, 3600);
+        } catch (\OutOfRangeException $e) {
+            $preferences = $this->dc->qb()
+                ->select('*')
+                ->from($this->dc->p('preferences'), 'p')
+                ->execute()
+                ->fetchAll();
+
+            foreach($preferences as $pref) {
+                // fix the PHP issue where . is changed to _ in the $_POST array
+                $this->preferences[$pref['name']] = $pref['value'];
+            }
         }
 
         $this->preferences = Hook::forge('Foolz\FoolFrame\Model\Preferences::load#var.preferences')
