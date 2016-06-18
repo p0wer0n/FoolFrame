@@ -26,7 +26,7 @@ return [
         /**
          *  URL to download a newer version
          */
-        'git_tags_url' => 'https://api.github.com/repos/foolcode/foolfuuka/tags',
+        'git_tags_url' => 'https://api.github.com/repos/foolcode/foolframe/tags',
 
         /**
          * URL to fetch the changelog

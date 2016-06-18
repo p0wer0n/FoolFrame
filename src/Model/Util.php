@@ -4,6 +4,7 @@ namespace Foolz\FoolFrame\Model;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Foolz\Cache\Cache;
 
 class Util
 {
@@ -122,5 +123,48 @@ class Util
         }
 
         return $size;
+    }
+
+    /**
+     * Returns the latest Foolz package version from github tagged releases.
+     *
+     * @param Context $context
+     * @param $package
+     * @return string
+     */
+    public static function getLatestFoolPackage(Context $context, $package)
+    {
+        try {
+            $version = Cache::item('foolframe.util.foolpackage.version.'.$package)->get();
+        } catch (\OutOfBoundsException $e) {
+            $version = 'No data. GitHub API limit likely exceeded.';
+            switch ($package) {
+                case "foolfuuka":
+                    $tags_url = $context->getService('config')->get('foolz/foolfuuka', 'package', 'main.git_tags_url');
+                    break;
+                case "foolframe":
+                    $tags_url = $context->getService('config')->get('foolz/foolframe', 'package', 'main.git_tags_url');
+                    break;
+                default:
+                    $tags_url = str_replace('foolframe', $package, $context->getService('config')->get('foolz/foolframe', 'package', 'main.git_tags_url'));
+                    break;
+            }
+            if (extension_loaded('curl')) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $tags_url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($ch, CURLOPT_USERAGENT, 'FoolFrame version checker (curl)');
+                $data = json_decode(curl_exec($ch), true);
+                curl_close($ch);
+                if (isset($data)) {
+                    if (isset($data[0]['name'])) {
+                        $version = $data[0]['name'];
+                        Cache::item('foolframe.util.foolpackage.version.'.$package)->set($version, 3600);
+                    }
+                }
+            }
+        }
+        return $version;
     }
 }
