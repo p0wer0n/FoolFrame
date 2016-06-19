@@ -36,6 +36,8 @@ class System
             ]
         ];
 
+        $fframe_ver = Util::getLatestFoolPackage($context, 'foolframe');
+
         $environment['software'] = [
             'title' => _i('Software Information'),
             'data' => [
@@ -44,33 +46,34 @@ class System
                     'value' => $context->getService('config')->get('foolz/foolframe', 'package', 'main.version'),
                     'alert' => [
                         'type' => 'info',
-                        'condition' => (version_compare($context->getService('config')->get('foolz/foolframe', 'package', 'main.version'), Util::getLatestFoolPackage($context, 'foolframe')) < 0),
+                        'condition' => (version_compare($context->getService('config')->get('foolz/foolframe', 'package', 'main.version'), $fframe_ver) < 0),
                         'title' => _i('New Update Available'),
                         'string' => _i('There is a new version of the software available for download.')
                     ]
                 ],
                 [
                     'title' => _i('Latest FoolFrame Version'),
-                    'value' => Util::getLatestFoolPackage($context, 'foolframe')
+                    'value' => $fframe_ver
                 ]
             ]
         ];
 
         if(is_array($context->getService('config')->get('foolz/foolframe', 'config', 'modules.installed'))) {
             if(array_key_exists('foolfuuka',$context->getService('config')->get('foolz/foolframe', 'config', 'modules.installed'))) {
+                $ffuuka_ver = Util::getLatestFoolPackage($context, 'foolfuuka');
                 array_push($environment['software']['data'], [
                     'title' => _i('Installed FoolFuuka Version'),
                     'value' => $context->getService('config')->get('foolz/foolfuuka', 'package', 'main.version'),
                     'alert' => [
                         'type' => 'info',
-                        'condition' => (version_compare($context->getService('config')->get('foolz/foolfuuka', 'package', 'main.version'), Util::getLatestFoolPackage($context, 'foolfuuka')) < 0),
+                        'condition' => (version_compare($context->getService('config')->get('foolz/foolfuuka', 'package', 'main.version'), $ffuuka_ver) < 0),
                         'title' => _i('New Update Available'),
                         'string' => _i('There is a new version of the software available for download.')
                     ]
                 ]);
                 array_push($environment['software']['data'], [
                     'title' => _i('Latest FoolFuuka Version'),
-                    'value' => Util::getLatestFoolPackage($context, 'foolfuuka')
+                    'value' => $ffuuka_ver
                 ]);
             }
         }

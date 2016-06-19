@@ -173,14 +173,18 @@ class Context implements ContextInterface
         // start up the caching system
         $caching_config = $this->config->get('foolz/foolframe', 'cache', '');
 
-        if($this->preferences->get('foolframe.cache.system')) {
-            $caching_config['type'] = $this->preferences->get('foolframe.cache.system');
+        $cache = $this->preferences->get('foolframe.cache.system', '');
+        $format = $this->preferences->get('foolframe.cache.format', '');
+        $cservers = $this->preferences->get('foolframe.cache.servers', '');
+
+        if($cache) {
+            $caching_config['type'] = $cache;
         }
-        if($this->preferences->get('foolframe.cache.format')) {
-            $caching_config['format'] = $this->preferences->get('foolframe.cache.format');
+        if($format) {
+            $caching_config['format'] = $format;
         }
-        if($this->preferences->get('foolframe.cache.servers')) {
-            $servers = explode(',',$this->preferences->get('foolframe.cache.servers'));
+        if($cservers) {
+            $servers = explode(',',$cservers);
             foreach($servers as $server) {
                 $server = explode(':',$server);
                 array_push($caching_config['servers'],array('host'=>$server[0],'port'=>$server[1],'weight'=>$server[2]));
