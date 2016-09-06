@@ -396,6 +396,9 @@ class Context implements ContextInterface
 
     public function handleConsole()
     {
+        foreach ($this->child_contextes as $context) {
+            $context->handleConsole();
+        }
         $application = new Application();
 
         Hook::forge('Foolz\FoolFrame\Model\Context::handleConsole#obj.app')
