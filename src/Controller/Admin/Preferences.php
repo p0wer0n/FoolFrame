@@ -388,7 +388,7 @@ class Preferences extends Admin
 
         $form['foolframe.auth.recaptcha_private'] = array(
             'type' => 'input',
-            'label' => _i('reCaptcha&trade; Prvate Key'),
+            'label' => _i('reCaptcha&trade; Private Key'),
             'preferences' => true,
             'help' => _i('Insert the private key provided by reCAPTCHA&trade;.'),
             'validation' => [new Trim()],
@@ -396,6 +396,33 @@ class Preferences extends Admin
         );
 
         $form['separator-2'] = array(
+            'type' => 'separator'
+        );
+
+        $form['paragraph2'] = array(
+            'type' => 'paragraph',
+            'help' => _i('In order to use reCAPTCHA2&trade; you need to sign up for the service at <a href="http://www.google.com/recaptcha">reCAPTCHA2&trade;</a>, which will provide you with a site and a secret key. If these are set reCAPTCHA2&trade; will be prefered.')
+        );
+
+        $form['foolframe.auth.recaptcha2_sitekey'] = array(
+            'type' => 'input',
+            'label' => _i('reCaptcha2&trade; Site Key'),
+            'preferences' => true,
+            'help' => _i('Insert the Site key provided by reCAPTCHA2&trade;.'),
+            'validation' => [new Trim()],
+            'class' => 'span4'
+        );
+
+        $form['foolframe.auth.recaptcha2_secret'] = array(
+            'type' => 'input',
+            'label' => _i('reCaptcha2&trade; Secret Key'),
+            'preferences' => true,
+            'help' => _i('Insert the Secret key provided by reCAPTCHA2&trade;.'),
+            'validation' => [new Trim()],
+            'class' => 'span4'
+        );
+
+        $form['separator-3'] = array(
             'type' => 'separator'
         );
 
