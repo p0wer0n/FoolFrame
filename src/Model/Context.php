@@ -173,24 +173,28 @@ class Context implements ContextInterface
         // start up the caching system
         $caching_config = $this->config->get('foolz/foolframe', 'cache', '');
 
-        $cache = $this->preferences->get('foolframe.cache.system', '');
-        $format = $this->preferences->get('foolframe.cache.format', '');
-        $cservers = $this->preferences->get('foolframe.cache.servers', '');
+        try {
+            $cache = $this->preferences->get('foolframe.cache.system', '');
+            $format = $this->preferences->get('foolframe.cache.format', '');
+            $cservers = $this->preferences->get('foolframe.cache.servers', '');
 
-        if($cache) {
-            $caching_config['type'] = $cache;
-        }
-        if($format) {
-            $caching_config['format'] = $format;
-        }
-        if($cservers) {
-            $servers = explode(',',$cservers);
-            foreach($servers as $server) {
-                $server = explode(':',$server);
-                array_push($caching_config['servers'],array('host'=>$server[0],'port'=>$server[1],'weight'=>$server[2]));
+            if ($cache) {
+                $caching_config['type'] = $cache;
             }
-        } else {
-            $caching_config['servers'] = array();
+            if ($format) {
+                $caching_config['format'] = $format;
+            }
+            if ($cservers) {
+                $servers = explode(',', $cservers);
+                foreach ($servers as $server) {
+                    $server = explode(':', $server);
+                    array_push($caching_config['servers'], array('host' => $server[0], 'port' => $server[1], 'weight' => $server[2]));
+                }
+            } else {
+                $caching_config['servers'] = array();
+            }
+        } catch(\Exception $e) {
+            // it's fine. just continue
         }
 
         switch ($caching_config['type']) {
