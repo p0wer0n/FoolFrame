@@ -6,9 +6,11 @@ use Foolz\Plugin\Hook;
 
 class System
 {
-    public static function getEnvironment(Context $context)
+    public static function getEnvironment(Context $context, $check_updates)
     {
         $environment = [];
+        $fframe_ver = '';
+        $ffuuka_ver = '';
 
         $environment['server'] = [
             'title' => _i('Server Information'),
@@ -36,13 +38,15 @@ class System
             ]
         ];
 
-        $fframe_ver = Util::getLatestFoolPackage($context, 'foolframe');
+        if ($check_updates) {
+            $fframe_ver = Util::getLatestFoolPackage($context, 'foolframe');
+        }
 
         $environment['software'] = [
             'title' => _i('Software Information'),
             'data' => [
                 [
-                    'title' => _i('Installed FoolFrame Version'),
+                    'title' => _i('This FoolFrame Version'),
                     'value' => $context->getService('config')->get('foolz/foolframe', 'package', 'main.version'),
                     'alert' => [
                         'type' => 'info',
@@ -53,16 +57,19 @@ class System
                 ],
                 [
                     'title' => _i('Latest FoolFrame Version'),
-                    'value' => $fframe_ver
+                    'value' => $fframe_ver,
+                    'checker' => true
                 ]
             ]
         ];
 
         if(is_array($context->getService('config')->get('foolz/foolframe', 'config', 'modules.installed'))) {
             if(array_key_exists('foolfuuka',$context->getService('config')->get('foolz/foolframe', 'config', 'modules.installed'))) {
-                $ffuuka_ver = Util::getLatestFoolPackage($context, 'foolfuuka');
+                if ($check_updates) {
+                    $ffuuka_ver = Util::getLatestFoolPackage($context, 'foolfuuka');
+                }
                 array_push($environment['software']['data'], [
-                    'title' => _i('Installed FoolFuuka Version'),
+                    'title' => _i('This FoolFuuka Version'),
                     'value' => $context->getService('config')->get('foolz/foolfuuka', 'package', 'main.version'),
                     'alert' => [
                         'type' => 'info',
@@ -73,7 +80,8 @@ class System
                 ]);
                 array_push($environment['software']['data'], [
                     'title' => _i('Latest FoolFuuka Version'),
-                    'value' => $ffuuka_ver
+                    'value' => $ffuuka_ver,
+                    'checker' => true
                 ]);
             }
         }

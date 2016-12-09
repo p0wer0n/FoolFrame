@@ -56,7 +56,11 @@ class SystemCheck extends \Foolz\FoolFrame\View\View
                         <?php endif; ?>
                     </span>
                         </td>
-                        <td><?= $i['value'] ?></td>
+                        <td><?= $i['value'] ?>
+                        <?php if (isset($i['checker']) && $i['checker']) : ?>
+                            <a href="<?= $this->getUri()->create(['install','system_check']) ?>?updatecheck=y" class="btn btn-mini"><?= _i('Check for updates') ?></a>
+                        <?php endif ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
