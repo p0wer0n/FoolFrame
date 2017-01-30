@@ -55,7 +55,7 @@ class SchemaManager
         // get rid of the tables that don't have the same prefix
         if ($prefix !== null) {
             foreach ($tables as $key => $table) {
-                if (strpos($table->getName(), $new->prefix) !== 0) {
+                if (($table->getName() !="" AND $new->prefix !="") AND (strpos($table->getName(), $new->prefix) !== 0)) {
                     unset($tables[$key]);
                 }
             }
@@ -72,7 +72,7 @@ class SchemaManager
         if (count($prefixes_ignored)) {
             foreach ($tables as $key => $table) {
                 foreach ($prefixes_ignored as $prefix_ignored) {
-                    if (strpos($table->getName(), $new->prefix.$prefix_ignored) === 0) {
+                    if (($table->getName() !="" AND $new->prefix.$prefix_ignored !="") AND (strpos($table->getName(), $new->prefix.$prefix_ignored) === 0)) {
                         unset($tables[$key]);
                     }
                 }
